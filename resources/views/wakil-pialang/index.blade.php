@@ -24,16 +24,24 @@
         </div>
     @endif
 
-    {{-- Pencarian (opsional) --}}
-    <form action="{{ route('wakil-pialang.index') }}" method="GET" class="mb-3">
-        <div class="input-group">
-            <input type="text" name="search" class="form-control" placeholder="Cari nomor ID / nama / status..."
-                value="{{ request('search') }}">
-            <div class="input-group-append">
-                <button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i></button>
-            </div>
-        </div>
-    </form>
+	    {{-- Pencarian (opsional) --}}
+	    <form action="{{ route('wakil-pialang.index') }}" method="GET" class="mb-3">
+	        <div class="input-group">
+	            <select name="kantor_cabang_id" class="custom-select" style="max-width: 260px;">
+	                <option value="">Semua cabang</option>
+	                @foreach ($kantorCabangs as $cabang)
+	                    <option value="{{ $cabang->id }}" {{ (string) request('kantor_cabang_id') === (string) $cabang->id ? 'selected' : '' }}>
+	                        {{ $cabang->nama_kantor_cabang }}
+	                    </option>
+	                @endforeach
+	            </select>
+	            <input type="text" name="search" class="form-control" placeholder="Cari nomor ID / nama / status..."
+	                value="{{ request('search') }}">
+	            <div class="input-group-append">
+	                <button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i></button>
+	            </div>
+	        </div>
+	    </form>
 
     <div class="row">
         @forelse ($wakilPialangs as $wp)
@@ -43,9 +51,14 @@
                         <img src="{{ asset($wp->image) }}" class="card-img-top" alt="{{ $wp->nama }}"
                             style="object-fit: cover; height: 180px;">
                     @endif
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title mb-1">{{ $wp->nama }}</h5>
-                        <p class="mb-1"><strong>No. ID:</strong> {{ $wp->nomor_id }}</p>
+	                    <div class="card-body d-flex flex-column">
+	                        @if ($wp->kantorCabang)
+	                            <div class="mb-2">
+	                                <span class="badge badge-info">{{ $wp->kantorCabang->nama_kantor_cabang }}</span>
+	                            </div>
+	                        @endif
+	                        <h5 class="card-title mb-1">{{ $wp->nama }}</h5>
+	                        <p class="mb-1"><strong>No. ID:</strong> {{ $wp->nomor_id }}</p>
                         <p class="mb-2">
                             <strong>Status:</strong>
                             @if ($wp->status === 'Aktif')

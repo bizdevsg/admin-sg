@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use App\Models\KantorCabang;
 use App\Models\WakilPialang;
 
 class WakilPialangController extends Controller
@@ -18,17 +20,24 @@ class WakilPialangController extends Controller
     public function index(Request $request)
     {
         $search = $request->query('search');
+        $kantorCabangId = $request->query('kantor_cabang_id');
+        $kantorCabangs = KantorCabang::query()->orderBy('nama_kantor_cabang')->get();
 
-        $wakilPialangs = WakilPialang::when($search, function ($q) use ($search) {
+        $wakilPialangs = WakilPialang::query()
+            ->with('kantorCabang')
+            ->when($search, function ($q) use ($search) {
             $q->where('nomor_id', 'like', "%{$search}%")
                 ->orWhere('nama', 'like', "%{$search}%")
                 ->orWhere('status', 'like', "%{$search}%");
-        })
+            })
+            ->when($kantorCabangId, function ($q) use ($kantorCabangId) {
+                $q->where('kantor_cabang_id', (int) $kantorCabangId);
+            })
             ->latest()
             ->paginate(10)
-            ->appends(['search' => $search]);
+            ->appends(['search' => $search, 'kantor_cabang_id' => $kantorCabangId]);
 
-        return view('wakil-pialang.index', compact('wakilPialangs'));
+        return view('wakil-pialang.index', compact('wakilPialangs', 'kantorCabangs', 'kantorCabangId'));
     }
 
     /**
@@ -36,7 +45,8 @@ class WakilPialangController extends Controller
      */
     public function create()
     {
-        return view('wakil-pialang.create');
+        $kantorCabangs = KantorCabang::query()->orderBy('nama_kantor_cabang')->get();
+        return view('wakil-pialang.create', compact('kantorCabangs'));
     }
 
     /**
@@ -45,6 +55,7 @@ class WakilPialangController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'kantor_cabang_id' => 'required|exists:kantor_cabangs,id',
             'image'    => 'required|image|mimes:jpg,jpeg,png,gif,webp|max:3072', // 3MB
             'nomor_id' => 'required|string|max:25',
             'nama'     => 'required|string|max:100',
@@ -52,8 +63,11 @@ class WakilPialangController extends Controller
         ]);
 
         try {
+            $kantorCabang = KantorCabang::findOrFail($validated['kantor_cabang_id']);
+            $cabangFolder = Str::slug($kantorCabang->nama_kantor_cabang) ?: 'cabang';
+
             // Pastikan folder ada
-            $dest = public_path('uploads/wakil-pialang');
+            $dest = public_path("uploads/wakil-pialang/{$cabangFolder}");
             if (! is_dir($dest)) {
                 mkdir($dest, 0775, true);
             }
@@ -64,7 +78,7 @@ class WakilPialangController extends Controller
             $file->move($dest, $filename);
 
             // Simpan path relatif agar mudah dipakai di view
-            $validated['image'] = 'uploads/wakil-pialang/' . $filename;
+            $validated['image'] = "uploads/wakil-pialang/{$cabangFolder}/{$filename}";
 
             WakilPialang::create($validated);
 
@@ -80,7 +94,8 @@ class WakilPialangController extends Controller
     public function edit($id)
     {
         $wakilPialang = WakilPialang::findOrFail($id);
-        return view('wakil-pialang.edit', compact('wakilPialang'));
+        $kantorCabangs = KantorCabang::query()->orderBy('nama_kantor_cabang')->get();
+        return view('wakil-pialang.edit', compact('wakilPialang', 'kantorCabangs'));
     }
 
     /**
@@ -91,6 +106,7 @@ class WakilPialangController extends Controller
         $wakilPialang = WakilPialang::findOrFail($id);
 
         $validated = $request->validate([
+            'kantor_cabang_id' => 'required|exists:kantor_cabangs,id',
             'image'    => 'nullable|image|mimes:jpg,jpeg,png,gif,webp|max:3072',
             'nomor_id' => 'required|string|max:25',
             'nama'     => 'required|string|max:100',
@@ -104,8 +120,11 @@ class WakilPialangController extends Controller
                     @unlink(public_path($wakilPialang->image));
                 }
 
+                $kantorCabang = KantorCabang::findOrFail($validated['kantor_cabang_id']);
+                $cabangFolder = Str::slug($kantorCabang->nama_kantor_cabang) ?: 'cabang';
+
                 // Pastikan folder ada
-                $dest = public_path('uploads/wakil-pialang');
+                $dest = public_path("uploads/wakil-pialang/{$cabangFolder}");
                 if (! is_dir($dest)) {
                     mkdir($dest, 0775, true);
                 }
@@ -114,7 +133,7 @@ class WakilPialangController extends Controller
                 $file     = $request->file('image');
                 $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
                 $file->move($dest, $filename);
-                $validated['image'] = 'uploads/wakil-pialang/' . $filename;
+                $validated['image'] = "uploads/wakil-pialang/{$cabangFolder}/{$filename}";
             }
 
             $wakilPialang->update($validated);

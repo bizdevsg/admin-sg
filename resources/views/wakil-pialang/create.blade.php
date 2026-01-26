@@ -12,12 +12,29 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
-            <form action="{{ route('wakil-pialang.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
+	            <form action="{{ route('wakil-pialang.store') }}" method="POST" enctype="multipart/form-data">
+	                @csrf
 
-                {{-- Gambar (wajib sesuai migration) --}}
-                <div class="form-group">
-                    <label class="font-weight-bold" for="image">Foto</label>
+	                <div class="form-group">
+	                    <label class="font-weight-bold" for="kantor_cabang_id">Cabang</label>
+	                    <select class="form-control @error('kantor_cabang_id') is-invalid @enderror" id="kantor_cabang_id"
+	                        name="kantor_cabang_id" required>
+	                        <option value="" disabled selected>Pilih cabang</option>
+	                        @foreach ($kantorCabangs as $cabang)
+	                            <option value="{{ $cabang->id }}"
+	                                {{ (string) old('kantor_cabang_id') === (string) $cabang->id ? 'selected' : '' }}>
+	                                {{ $cabang->nama_kantor_cabang }}
+	                            </option>
+	                        @endforeach
+	                    </select>
+	                    @error('kantor_cabang_id')
+	                        <div class="invalid-feedback">{{ $message }}</div>
+	                    @enderror
+	                </div>
+
+	                {{-- Gambar (wajib sesuai migration) --}}
+	                <div class="form-group">
+	                    <label class="font-weight-bold" for="image">Foto</label>
                     <input type="file" class="form-control-file @error('image') is-invalid @enderror" id="image"
                         name="image" accept="image/*" required>
                     @error('image')
