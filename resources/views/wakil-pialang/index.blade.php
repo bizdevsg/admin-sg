@@ -26,19 +26,26 @@
 
 	    {{-- Pencarian (opsional) --}}
 	    <form action="{{ route('wakil-pialang.index') }}" method="GET" class="mb-3">
-	        <div class="input-group">
-	            <select name="kantor_cabang_id" class="custom-select" style="max-width: 260px;">
-	                <option value="">Semua cabang</option>
-	                @foreach ($kantorCabangs as $cabang)
-	                    <option value="{{ $cabang->id }}" {{ (string) request('kantor_cabang_id') === (string) $cabang->id ? 'selected' : '' }}>
-	                        {{ $cabang->nama_kantor_cabang }}
-	                    </option>
-	                @endforeach
-	            </select>
-	            <input type="text" name="search" class="form-control" placeholder="Cari nomor ID / nama / status..."
-	                value="{{ request('search') }}">
-	            <div class="input-group-append">
-	                <button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i></button>
+	        <div class="form-row">
+	            <div class="col-12 col-md-4 mb-2 mb-md-0">
+	                <select name="kantor_cabang_id" class="form-control">
+	                    <option value="">Semua cabang</option>
+	                    @foreach ($kantorCabangs as $cabang)
+	                        <option value="{{ $cabang->id }}"
+	                            {{ (string) request('kantor_cabang_id') === (string) $cabang->id ? 'selected' : '' }}>
+	                            {{ $cabang->nama_kantor_cabang }}
+	                        </option>
+	                    @endforeach
+	                </select>
+	            </div>
+	            <div class="col-12 col-md-8">
+	                <div class="input-group">
+	                    <input type="text" name="search" class="form-control"
+	                        placeholder="Cari nomor ID / nama / status..." value="{{ request('search') }}">
+	                    <div class="input-group-append">
+	                        <button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i></button>
+	                    </div>
+	                </div>
 	            </div>
 	        </div>
 	    </form>
