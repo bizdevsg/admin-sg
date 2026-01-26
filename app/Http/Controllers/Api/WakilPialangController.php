@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\wakilPialang;
+use App\Models\WakilPialang;
 use Illuminate\Http\Request;
 
 class WakilPialangController extends Controller
