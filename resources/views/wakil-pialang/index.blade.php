@@ -30,6 +30,9 @@
 	            <div class="col-12 col-md-4 mb-2 mb-md-0">
 	                <select name="kantor_cabang_id" class="form-control">
 	                    <option value="">Semua cabang</option>
+	                    <option value="0" {{ (string) request('kantor_cabang_id') === '0' ? 'selected' : '' }}>
+	                        {{ $kantorPusatLabel }}
+	                    </option>
 	                    @foreach ($kantorCabangs as $cabang)
 	                        <option value="{{ $cabang->id }}"
 	                            {{ (string) request('kantor_cabang_id') === (string) $cabang->id ? 'selected' : '' }}>
@@ -62,6 +65,10 @@
 	                        @if ($wp->kantorCabang)
 	                            <div class="mb-2">
 	                                <span class="badge badge-info">{{ $wp->kantorCabang->nama_kantor_cabang }}</span>
+	                            </div>
+	                        @else
+	                            <div class="mb-2">
+	                                <span class="badge badge-info">Kantor Pusat</span>
 	                            </div>
 	                        @endif
 	                        <h5 class="card-title mb-1">{{ $wp->nama }}</h5>

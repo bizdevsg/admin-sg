@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\KantorCabang;
+use App\Models\Setting;
 use App\Models\WakilPialang;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,12 @@ class WakilPialangController extends Controller
         $query = WakilPialang::query()->with('kantorCabang');
 
         if ($request->filled('kantor_cabang_id')) {
-            $query->where('kantor_cabang_id', (int) $request->query('kantor_cabang_id'));
+            $kantorCabangId = (int) $request->query('kantor_cabang_id');
+            if ($kantorCabangId === 0) {
+                $query->whereNull('kantor_cabang_id');
+            } else {
+                $query->where('kantor_cabang_id', $kantorCabangId);
+            }
         }
 
         $wakilPialangs = $query->get();
@@ -31,11 +37,32 @@ class WakilPialangController extends Controller
 
     public function folders()
     {
+        $setting = Setting::query()->first();
+        $kantorPusatLabel = $setting?->web_title ? "Kantor Pusat - {$setting->web_title}" : 'Kantor Pusat';
+
+        $kantorPusat = [
+            'id' => 0,
+            'nama_kantor_cabang' => $kantorPusatLabel,
+            'wakil_pialangs_count' => WakilPialang::query()->whereNull('kantor_cabang_id')->count(),
+            'address' => $setting?->address,
+            'phone' => $setting?->phone,
+            'email' => $setting?->email,
+            'is_pusat' => true,
+        ];
+
         $folders = KantorCabang::query()
             ->select(['id', 'nama_kantor_cabang'])
             ->withCount('wakilPialangs')
             ->orderBy('nama_kantor_cabang')
             ->get();
+
+        $folders = $folders
+            ->map(function ($folder) {
+                $folder->is_pusat = false;
+                return $folder;
+            })
+            ->prepend($kantorPusat)
+            ->values();
 
         return response()->json([
             'status' => 200,

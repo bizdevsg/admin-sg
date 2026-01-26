@@ -20,6 +20,9 @@
 	                    <select class="form-control @error('kantor_cabang_id') is-invalid @enderror" id="kantor_cabang_id"
 	                        name="kantor_cabang_id" required>
 	                        <option value="" disabled selected>Pilih cabang</option>
+	                        <option value="0" {{ (string) old('kantor_cabang_id') === '0' ? 'selected' : '' }}>
+	                            {{ $kantorPusatLabel }}
+	                        </option>
 	                        @foreach ($kantorCabangs as $cabang)
 	                            <option value="{{ $cabang->id }}"
 	                                {{ (string) old('kantor_cabang_id') === (string) $cabang->id ? 'selected' : '' }}>
