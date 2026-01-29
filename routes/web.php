@@ -26,7 +26,7 @@ use App\Http\Controllers\LegalitasController;
 */
 
 // Authentication routes
-Auth::routes(['register' => true]);
+Auth::routes(['register' => false]);
 
 // Home Page Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');

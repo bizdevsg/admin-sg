@@ -46,9 +46,10 @@ Route::prefix('v1')->group(function () {
     // ===== Legalitas =====
     Route::get('/legalitas',    [LegalitasController::class, 'index']);
 
-    // ===== Wakil Pialang =====
-    Route::get('/wakil-pialang',    [WakilPialangController::class, 'index']);
+	    // ===== Wakil Pialang =====
+	    Route::get('/wakil-pialang/folders', [WakilPialangController::class, 'folders']);
+	    Route::get('/wakil-pialang',    [WakilPialangController::class, 'index']);
 
-    // ===== kantor Cabang =====
-    Route::get('/kantor-cabang',    [KantorCabangController::class, 'index']);
-});
+	    // ===== kantor Cabang =====
+	    Route::get('/kantor-cabang',    [KantorCabangController::class, 'index']);
+	});
