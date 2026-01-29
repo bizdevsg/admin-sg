@@ -105,6 +105,14 @@
                 </a>
             </li>
 
+            <!-- Nav Item - Informasi -->
+            <li class="nav-item {{ Nav::isRoute('informasi.*') }}">
+                <a class="nav-link" href="{{ route('informasi.index') }}">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>{{ __('Informasi') }}</span>
+                </a>
+            </li>
+
             <!-- Nav Item - Kantor Cabang -->
             <li class="nav-item {{ Nav::isRoute('kantor-cabang.*') }}">
                 <a class="nav-link" href="{{ route('kantor-cabang.index') }}">

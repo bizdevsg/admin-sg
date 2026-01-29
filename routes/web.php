@@ -14,6 +14,7 @@ use App\Http\Controllers\KantorCabangController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\WakilPialangController;
 use App\Http\Controllers\LegalitasController;
+use App\Http\Controllers\InformasiController;
 
 
 /*
@@ -99,6 +100,16 @@ Route::prefix('legalitas')->name('legalitas.')->middleware('auth')->group(functi
     Route::get('/{id}/edit', [LegalitasController::class, 'edit'])->name('edit');
     Route::put('/{id}',      [LegalitasController::class, 'update'])->name('update');
     Route::delete('/{id}',   [LegalitasController::class, 'destroy'])->name('destroy');
+});
+
+Route::prefix('informasi')->name('informasi.')->middleware('auth')->group(function () {
+    Route::get('/',          [InformasiController::class, 'index'])->name('index');
+    Route::get('/create',    [InformasiController::class, 'create'])->name('create');
+    Route::post('/',         [InformasiController::class, 'store'])->name('store');
+    Route::get('/{id}',      [InformasiController::class, 'show'])->name('show');
+    Route::get('/{id}/edit', [InformasiController::class, 'edit'])->name('edit');
+    Route::put('/{id}',      [InformasiController::class, 'update'])->name('update');
+    Route::delete('/{id}',   [InformasiController::class, 'destroy'])->name('destroy');
 });
 
 // Routes Handling Errors

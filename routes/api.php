@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\LegalitasController;
 use App\Http\Controllers\Api\ProdukController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\WakilPialangController;
+use App\Http\Controllers\Api\InformasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,4 +53,8 @@ Route::prefix('v1')->group(function () {
 
 	    // ===== kantor Cabang =====
 	    Route::get('/kantor-cabang',    [KantorCabangController::class, 'index']);
+
+	    // ===== Informasi Umum =====
+	    Route::get('/informasi',        [InformasiController::class, 'index']);
+	    Route::get('/informasi/{slug}', [InformasiController::class, 'show']);
 	});
