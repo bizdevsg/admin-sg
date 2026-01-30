@@ -36,7 +36,7 @@
                                 <td class="align-middle">{{ $produk->nama_produk }}</td>
                                 <td class="align-middle">{{ Str::limit($produk->deskripsi_produk, 50) }}</td>
                                 <td class="align-middle">
-                                    @if ($produk->nama_produk === 'JFX')
+                                    @if ($produk->kategori === 'JFX')
                                         <span>Multilateral (JFX)</span>
                                     @else
                                         <span>Bilateral (SPA)</span>
