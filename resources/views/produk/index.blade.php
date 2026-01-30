@@ -51,15 +51,14 @@
                                         class="btn btn-sm btn-warning w-100 mx-1">
                                         <i class="fas fa-edit"></i> Edit
                                     </a>
-                                    <form action="{{ route('produk.destroy', $produk->id) }}" method="POST"
-                                        class="d-inline w-100 ml-1"
-                                        onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger w-100">
-                                            <i class="fas fa-trash"></i> Hapus
-                                        </button>
-                                    </form>
+                                    <button type="button"
+                                        class="btn btn-sm btn-danger w-100 ml-1 js-delete-produk"
+                                        data-toggle="modal"
+                                        data-target="#deleteProdukModal"
+                                        data-action="{{ route('produk.destroy', $produk->id) }}"
+                                        data-nama="{{ $produk->nama_produk }}">
+                                        <i class="fas fa-trash"></i> Hapus
+                                    </button>
                                 </td>
                             </tr>
                         @empty
@@ -72,4 +71,45 @@
             </div>
         </div>
     </div>
+
+    <!-- Delete Produk Modal -->
+    <div class="modal fade" id="deleteProdukModal" tabindex="-1" role="dialog"
+        aria-labelledby="deleteProdukModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteProdukModalLabel">Hapus Produk</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-0">Yakin ingin menghapus produk <strong id="deleteProdukName">ini</strong>?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal">Batal</button>
+                    <form id="deleteProdukForm" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Hapus</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('scripts')
+    <script>
+        $(function () {
+            $('#deleteProdukModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var action = button.data('action');
+                var nama = button.data('nama');
+
+                $('#deleteProdukForm').attr('action', action);
+                $('#deleteProdukName').text(nama || 'ini');
+            });
+        });
+    </script>
 @endsection

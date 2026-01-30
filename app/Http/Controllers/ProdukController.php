@@ -116,8 +116,10 @@ class ProdukController extends Controller
     /**
      * Hapus produk
      */
-    public function destroy(Produk $produk)
+    public function destroy($id)
     {
+        $produk = Produk::findOrFail($id);
+
         if ($produk->image && file_exists(public_path($produk->image))) {
             unlink(public_path($produk->image));
         }
