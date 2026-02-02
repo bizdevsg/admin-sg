@@ -66,13 +66,12 @@ class WakilPialangController extends Controller
     }
 
     /**
-     * Simpan data baru (gambar disimpan ke public/uploads/wakil-pialang).
+     * Simpan data baru.
      */
     public function store(Request $request)
     {
         $validated = $request->validate([
             'kantor_cabang_id' => 'required|integer|min:0',
-            'image'    => 'required|image|mimes:jpg,jpeg,png,gif,webp|max:3072', // 3MB
             'nomor_id' => 'required|string|max:25',
             'nama'     => 'required|string|max:100',
             'status'   => 'required|in:Aktif,Non-Aktif',
@@ -91,20 +90,8 @@ class WakilPialangController extends Controller
                 $cabangFolder = Str::slug($kantorCabang->nama_kantor_cabang) ?: 'cabang';
             }
 
-            // Pastikan folder ada
-            $dest = public_path("uploads/wakil-pialang/{$cabangFolder}");
-            if (! is_dir($dest)) {
-                mkdir($dest, 0775, true);
-            }
-
-            // Simpan file ke public/
-            $file     = $request->file('image');
-            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->move($dest, $filename);
-
-            // Simpan path relatif agar mudah dipakai di view
-            $validated['image'] = "uploads/wakil-pialang/{$cabangFolder}/{$filename}";
             $validated['kantor_cabang_id'] = $kantorCabangId === 0 ? null : $kantorCabangId;
+            $validated['image'] = '';
 
             WakilPialang::create($validated);
 
@@ -128,7 +115,7 @@ class WakilPialangController extends Controller
     }
 
     /**
-     * Update data (gambar opsional; jika diunggah, hapus yang lama).
+     * Update data.
      */
     public function update(Request $request, $id)
     {
@@ -136,7 +123,6 @@ class WakilPialangController extends Controller
 
         $validated = $request->validate([
             'kantor_cabang_id' => 'required|integer|min:0',
-            'image'    => 'nullable|image|mimes:jpg,jpeg,png,gif,webp|max:3072',
             'nomor_id' => 'required|string|max:25',
             'nama'     => 'required|string|max:100',
             'status'   => 'required|in:Aktif,Non-Aktif',
@@ -153,25 +139,6 @@ class WakilPialangController extends Controller
                 }
 
                 $cabangFolder = Str::slug($kantorCabang->nama_kantor_cabang) ?: 'cabang';
-            }
-
-            if ($request->hasFile('image')) {
-                // Hapus file lama jika ada
-                if ($wakilPialang->image && file_exists(public_path($wakilPialang->image))) {
-                    @unlink(public_path($wakilPialang->image));
-                }
-
-                // Pastikan folder ada
-                $dest = public_path("uploads/wakil-pialang/{$cabangFolder}");
-                if (! is_dir($dest)) {
-                    mkdir($dest, 0775, true);
-                }
-
-                // Simpan file baru
-                $file     = $request->file('image');
-                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-                $file->move($dest, $filename);
-                $validated['image'] = "uploads/wakil-pialang/{$cabangFolder}/{$filename}";
             }
 
             $validated['kantor_cabang_id'] = $kantorCabangId === 0 ? null : $kantorCabangId;

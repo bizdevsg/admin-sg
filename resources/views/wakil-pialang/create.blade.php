@@ -12,7 +12,7 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
-	            <form action="{{ route('wakil-pialang.store') }}" method="POST" enctype="multipart/form-data">
+	            <form action="{{ route('wakil-pialang.store') }}" method="POST">
 	                @csrf
 
 	                <div class="form-group">
@@ -34,17 +34,6 @@
 	                        <div class="invalid-feedback">{{ $message }}</div>
 	                    @enderror
 	                </div>
-
-	                {{-- Gambar (wajib sesuai migration) --}}
-	                <div class="form-group">
-	                    <label class="font-weight-bold" for="image">Foto</label>
-                    <input type="file" class="form-control-file @error('image') is-invalid @enderror" id="image"
-                        name="image" accept="image/*" required>
-                    @error('image')
-                        <div class="invalid-feedback d-block">{{ $message }}</div>
-                    @enderror
-                    <small class="text-muted d-block">Format: jpg, jpeg, png, gif, webp. Maks 3MB.</small>
-                </div>
 
                 <div class="form-group">
                     <label class="font-weight-bold" for="nomor_id">Nomor ID</label>

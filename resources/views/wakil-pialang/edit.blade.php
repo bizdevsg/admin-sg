@@ -12,7 +12,7 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
-	            <form action="{{ route('wakil-pialang.update', $wakilPialang->id) }}" method="POST" enctype="multipart/form-data">
+	            <form action="{{ route('wakil-pialang.update', $wakilPialang->id) }}" method="POST">
 	                @csrf
 	                @method('PUT')
 
@@ -44,17 +44,6 @@
                             class="img-fluid rounded mb-2" style="max-height: 220px; object-fit: cover;">
                     </div>
                 @endif
-
-                {{-- Ganti gambar (opsional) --}}
-                <div class="form-group">
-                    <label class="font-weight-bold" for="image">Ganti Foto (opsional)</label>
-                    <input type="file" class="form-control-file @error('image') is-invalid @enderror" id="image"
-                        name="image" accept="image/*">
-                    @error('image')
-                        <div class="invalid-feedback d-block">{{ $message }}</div>
-                    @enderror
-                    <small class="text-muted d-block">Biarkan kosong jika tidak ingin mengubah foto.</small>
-                </div>
 
                 <div class="form-group">
                     <label class="font-weight-bold" for="nomor_id">Nomor ID</label>
