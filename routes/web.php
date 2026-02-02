@@ -12,6 +12,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\HandlingController;
 use App\Http\Controllers\KantorCabangController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\TiktokController;
 use App\Http\Controllers\WakilPialangController;
 use App\Http\Controllers\LegalitasController;
 use App\Http\Controllers\InformasiController;
@@ -51,6 +52,16 @@ Route::get('/video/edit/{id}', [VideoController::class, 'edit'])->name('video.ed
 Route::put('/video/edit/put/{id}', [VideoController::class, 'update'])->name('video.update');
 Route::delete('/video/delete/{id}', [VideoController::class, 'destroy'])->name('video.destroy');
 Route::delete('/video/delete', [VideoController::class, 'bulkDelete'])->name('video.bulkDelete');
+
+// TikTok Page Routes
+Route::prefix('tiktok')->name('tiktok.')->middleware('auth')->group(function () {
+    Route::get('/', [TiktokController::class, 'index'])->name('index');
+    Route::get('/create', [TiktokController::class, 'create'])->name('create');
+    Route::post('/', [TiktokController::class, 'store'])->name('store');
+    Route::get('/{id}/edit', [TiktokController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [TiktokController::class, 'update'])->name('update');
+    Route::delete('/{id}', [TiktokController::class, 'destroy'])->name('destroy');
+});
 
 // Profile Routes
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile');

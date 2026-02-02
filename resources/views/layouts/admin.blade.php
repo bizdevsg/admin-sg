@@ -80,6 +80,14 @@
                     <span>{{ __('Video') }}</span>
                 </a>
             </li>
+            
+            <!-- Nav Item - TikTok -->
+            <li class="nav-item {{ Nav::isRoute('tiktok.*') }}">
+                <a class="nav-link" href="{{ route('tiktok.index') }}">
+                    <i class="fa-brands fa-tiktok"></i>
+                    <span>{{ __('TikTok') }}</span>
+                </a>
+            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider">

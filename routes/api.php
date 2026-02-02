@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\KantorCabangController;
 use App\Http\Controllers\Api\LegalitasController;
 use App\Http\Controllers\Api\ProdukController;
 use App\Http\Controllers\Api\SettingController;
+use App\Http\Controllers\Api\TiktokController;
 use App\Http\Controllers\Api\WakilPialangController;
 use App\Http\Controllers\Api\InformasiController;
 
@@ -34,6 +35,9 @@ Route::prefix('v1')->group(function () {
 
     // ===== Video =====
     Route::get('/video',            [VideoController::class, 'index']);
+
+    // ===== TikTok =====
+    Route::get('/tiktok',           [TiktokController::class, 'index']);
 
     // ===== Banner =====
     Route::get('/banner',           [BannerController::class, 'index']);
