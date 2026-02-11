@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('settings', function (Blueprint $table) {
-            $table->string('maps_link', 255)->nullable()->after('address');
-            $table->string('link_pengaduan', 255)->nullable()->after('maps_link');
+            if (!Schema::hasColumn('settings', 'maps_link')) {
+                $table->string('maps_link', 255)->nullable()->after('address');
+            }
+            if (!Schema::hasColumn('settings', 'link_pengaduan')) {
+                $table->string('link_pengaduan', 255)->nullable()->after('maps_link');
+            }
         });
     }
 
@@ -23,7 +27,12 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('settings', function (Blueprint $table) {
-            $table->dropColumn(['maps_link', 'link_pengaduan']);
+            if (Schema::hasColumn('settings', 'link_pengaduan')) {
+                $table->dropColumn('link_pengaduan');
+            }
+            if (Schema::hasColumn('settings', 'maps_link')) {
+                $table->dropColumn('maps_link');
+            }
         });
     }
 };
