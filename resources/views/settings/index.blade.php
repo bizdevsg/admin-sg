@@ -68,6 +68,16 @@
                     @enderror
                 </div>
 
+                <div class="form-group">
+                    <label for="link_pengaduan" class="font-weight-bold">Link Pengaduan</label>
+                    <input type="url" class="form-control @error('link_pengaduan') is-invalid @enderror"
+                        id="link_pengaduan" name="link_pengaduan"
+                        value="{{ old('link_pengaduan', $setting->link_pengaduan ?? '') }}">
+                    @error('link_pengaduan')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
                 <!-- Telepon -->
                 <div class="form-group">
                     <label for="phone" class="font-weight-bold">Telepon</label>
