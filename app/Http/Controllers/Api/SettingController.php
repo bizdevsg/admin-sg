@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
-use Illuminate\Http\Request;
 
 class SettingController extends Controller
 {
@@ -13,7 +12,21 @@ class SettingController extends Controller
      */
     public function index()
     {
-        $settings = Setting::all();
+        $settings = Setting::query()
+            ->select([
+                'id',
+                'web_title',
+                'web_description',
+                'address',
+                'maps_link',
+                'link_pengaduan',
+                'phone',
+                'fax',
+                'email',
+                'created_at',
+                'updated_at',
+            ])
+            ->get();
 
         return response()->json([
             'status' => 200,
