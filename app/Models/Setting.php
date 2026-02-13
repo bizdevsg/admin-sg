@@ -16,6 +16,8 @@ class Setting extends Model
         'web_description',
         'address',
         'maps_link',
+        'link_pengaduan',
+        'mailto_link',
         'phone',
         'fax',
         'email'
