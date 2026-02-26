@@ -14,5 +14,6 @@ class TiktokLink extends Model
     protected $fillable = [
         'title',
         'embed_code',
+        'backup_video_path',
     ];
 }

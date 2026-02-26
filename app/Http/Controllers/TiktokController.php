@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TiktokLink;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TiktokController extends Controller
 {
@@ -45,9 +46,15 @@ class TiktokController extends Controller
         $validated = $request->validate([
             'title' => 'nullable|string|max:100',
             'embed_code' => 'required|string',
+            'backup_video' => 'nullable|file|mimes:mp4,mov,mkv,webm|max:51200',
         ]);
 
         try {
+            if ($request->hasFile('backup_video')) {
+                $validated['backup_video_path'] = $request->file('backup_video')
+                    ->store('tiktok_backups', 'public');
+            }
+
             TiktokLink::create($validated);
 
             return redirect()->route('tiktok.index')->with('success', 'Link TikTok berhasil ditambahkan!');
@@ -75,9 +82,19 @@ class TiktokController extends Controller
         $validated = $request->validate([
             'title' => 'nullable|string|max:100',
             'embed_code' => 'required|string',
+            'backup_video' => 'nullable|file|mimes:mp4,mov,mkv,webm|max:51200',
         ]);
 
         try {
+            if ($request->hasFile('backup_video')) {
+                if ($tiktok->backup_video_path) {
+                    Storage::disk('public')->delete($tiktok->backup_video_path);
+                }
+
+                $validated['backup_video_path'] = $request->file('backup_video')
+                    ->store('tiktok_backups', 'public');
+            }
+
             $tiktok->update($validated);
 
             return redirect()->route('tiktok.index')->with('success', 'Link TikTok berhasil diperbarui!');
@@ -95,6 +112,10 @@ class TiktokController extends Controller
 
         if (! $tiktok) {
             return redirect()->route('tiktok.index')->with('error', 'Data TikTok tidak ditemukan.');
+        }
+
+        if ($tiktok->backup_video_path) {
+            Storage::disk('public')->delete($tiktok->backup_video_path);
         }
 
         $tiktok->delete();

@@ -12,7 +12,7 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
-            <form action="{{ route('tiktok.store') }}" method="POST">
+            <form action="{{ route('tiktok.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="form-group">
@@ -32,6 +32,16 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                     <small class="text-muted d-block">Isi URL/embed TikTok.</small>
+                </div>
+
+                <div class="form-group">
+                    <label class="font-weight-bold" for="backup_video">Video Backup (opsional)</label>
+                    <input type="file" class="form-control-file @error('backup_video') is-invalid @enderror"
+                        id="backup_video" name="backup_video" accept=".mp4,.mov,.mkv,.webm">
+                    @error('backup_video')
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
+                    <small class="text-muted d-block">Max 50MB. Format: mp4, mov, mkv, webm.</small>
                 </div>
 
                 <div class="d-flex justify-content-between">

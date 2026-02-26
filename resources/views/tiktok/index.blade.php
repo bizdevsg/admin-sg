@@ -53,6 +53,7 @@
                     <th class="text-center">#</th>
                     <th class="text-center">Judul</th>
                     <th class="text-center">Link Embed</th>
+                    <th class="text-center">Video Backup</th>
                     <th class="text-center">Tanggal Dibuat</th>
                     <th class="text-center">Aksi</th>
                 </tr>
@@ -70,6 +71,16 @@
                             <a href="{{ $tiktok->embed_code }}" target="_blank" class="btn btn-success btn-sm text-dark">
                                 <i class="fas fa-external-link-alt"></i> Lihat
                             </a>
+                        </td>
+                        <td class="align-middle text-center">
+                            @if ($tiktok->backup_video_path)
+                                <a href="{{ Storage::url($tiktok->backup_video_path) }}" target="_blank"
+                                    class="btn btn-info btn-sm text-dark">
+                                    <i class="fas fa-video"></i> Video
+                                </a>
+                            @else
+                                <span class="text-muted">-</span>
+                            @endif
                         </td>
                         <td class="align-middle text-center">
                             {{ \Carbon\Carbon::parse($tiktok->updated_at)->translatedFormat('l, d F Y, H:i') }}
@@ -95,7 +106,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center text-muted">
+                        <td colspan="6" class="text-center text-muted">
                             Tidak ada data TikTok yang tersedia.
                         </td>
                     </tr>
