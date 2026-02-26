@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('settings', function (Blueprint $table) {
-            $table->string('link_pengaduan')->nullable()->after('maps_link');
-        });
+        if (! Schema::hasColumn('settings', 'link_pengaduan')) {
+            Schema::table('settings', function (Blueprint $table) {
+                $table->string('link_pengaduan')->nullable()->after('maps_link');
+            });
+        }
     }
 
     /**
@@ -21,8 +23,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('settings', function (Blueprint $table) {
-            $table->dropColumn('link_pengaduan');
-        });
+        if (Schema::hasColumn('settings', 'link_pengaduan')) {
+            Schema::table('settings', function (Blueprint $table) {
+                $table->dropColumn('link_pengaduan');
+            });
+        }
     }
 };
