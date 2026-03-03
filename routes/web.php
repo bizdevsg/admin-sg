@@ -16,6 +16,7 @@ use App\Http\Controllers\TiktokController;
 use App\Http\Controllers\WakilPialangController;
 use App\Http\Controllers\LegalitasController;
 use App\Http\Controllers\InformasiController;
+use App\Http\Controllers\TinyMceController;
 
 
 /*
@@ -32,6 +33,9 @@ Auth::routes(['register' => false]);
 
 // Home Page Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// TinyMCE upload
+Route::post('/tinymce/upload', [TinyMceController::class, 'upload'])->name('tinymce.upload')->middleware('auth');
 
 // Produk Page Routes
 Route::prefix('produk')->group(function () {
